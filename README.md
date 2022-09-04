@@ -11,4 +11,3 @@ movies-explorer-api
 - Git
 
 Выполнил Sukhanov Igor
-
