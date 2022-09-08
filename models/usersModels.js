@@ -5,7 +5,6 @@ const userShema = new mongoose.Schema(
   {
     name: {
       type: String,
-      default: 'Любитель фильмов',
       minLength: 2,
       maxLength: 30,
     },

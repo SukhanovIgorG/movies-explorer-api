@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { patternUrl } = require('../utils/constants');
+const validator = require('validator');
 
 const movieShema = new mongoose.Schema(
   {
@@ -27,30 +27,21 @@ const movieShema = new mongoose.Schema(
       type: String,
       required: true,
       validate: {
-        validator(v) {
-          return patternUrl.test(v); // ВОЗМОЖНЫ ПРОБЛЕМЫ, ПРОВЕРИТЬ
-        },
-        message: (props) => `${props.value} is not a valid url!`,
+        validator: (link) => validator.isURL(link),
       },
     },
     trailerLink: {
       type: String,
       required: true,
       validate: {
-        validator(v) {
-          return patternUrl.test(v);
-        },
-        message: (props) => `${props.value} is not a valid url!`,
+        validator: (link) => validator.isURL(link),
       },
     },
     thumbnail: {
       type: String,
       required: true,
       validate: {
-        validator(v) {
-          return patternUrl.test(v);
-        },
-        message: (props) => `${props.value} is not a valid url!`,
+        validator: (link) => validator.isURL(link),
       },
     },
     owner: {
@@ -63,6 +54,12 @@ const movieShema = new mongoose.Schema(
     },
     nameEN: {
       type: String,
+      required: true,
+    },
+    movieId: {
+      type: Number,
+      id: true,
+      index: true,
       required: true,
     },
   },

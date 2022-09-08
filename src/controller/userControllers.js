@@ -1,19 +1,25 @@
 require('dotenv').config();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+
 const NotFoundError = require('../../errors/not-found-error');
 const CastError = require('../../errors/cast-error');
 const MongoError = require('../../errors/mongo-error');
 const AuthError = require('../../errors/auth-error');
 
+const {
+  mongoErrorMessage, castErrorMessage, notFoundErrorMessage, loginErrorMessage,
+} = require('../../utils/constants');
+
 const { User } = require('../../models/usersModels');
 
 const { JWT_SECRET, NODE_ENV } = process.env;
+const { jwtKey } = require('../../utils/constants');
 
 exports.getUserInfo = async (req, res, next) => {
   await User.findById(req.user._id)
     .orFail(() => {
-      throw new NotFoundError('Пользователь не найден');
+      throw new NotFoundError(notFoundErrorMessage);
     })
     .then((user) => {
       res.send({ user });
@@ -35,8 +41,11 @@ exports.updateUserInfo = async (req, res, next) => {
     .then((user) => res.send({ user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new CastError('переданы некорректные данные'));
-      } else { next(err); }
+        next(new CastError(castErrorMessage));
+      }
+      if (err.code === 11000) {
+        return next(new MongoError(mongoErrorMessage));
+      } return next(err);
     });
 };
 
@@ -62,10 +71,10 @@ exports.createUser = (req, res, next) => {
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return next(new NotFoundError('Неверный запрос или данные'));
+        return next(new NotFoundError(notFoundErrorMessage));
       }
       if (err.code === 11000) {
-        return next(new MongoError('Пользователь с таким email уже существует'));
+        return next(new MongoError(mongoErrorMessage));
       }
       return next(err);
     });
@@ -78,14 +87,14 @@ exports.login = (req, res, next) => {
     .select('+password')
     .then((user) => {
       if (!user) {
-        return Promise.reject(new Error('Неправильные почта или пароль'));
+        return Promise.reject(new Error(loginErrorMessage));
       }
 
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
           // хеши не совпали — отклоняем промис
-            return Promise.reject(new Error('Неправильные почта или пароль'));
+            return Promise.reject(new Error(loginErrorMessage));
           }
           // аутентификация успешна
           return user;
@@ -93,17 +102,16 @@ exports.login = (req, res, next) => {
         .then((userAuth) => {
           const token = jwt.sign(
             { _id: userAuth._id },
-            NODE_ENV === 'production' ? JWT_SECRET : 'super-strong-secret-key',
+            NODE_ENV === 'production' ? JWT_SECRET : jwtKey,
             { expiresIn: '1d' },
           );
           res
             .send({
               token,
-              // message: 'авторизация прошла очень успешно'
             });
         });
     })
     .catch(() => {
-      next(new AuthError('ошибка авторизации'));
+      next(new AuthError(loginErrorMessage));
     });
 };
