@@ -1,2 +1,18 @@
 exports.patternUrl = /[-a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*)?/;
 exports.patternEmail = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+exports.jwtDev = 'super-strong-secret-key';
+exports.mongoDev = 'mongodb://localhost:27017/moviesdb';
+exports.castErrorCode = 400;
+exports.authErrorCode = 401;
+exports.rulesErrorCode = 403;
+exports.notFoundErrorCode = 404;
+exports.mongoErrorCode = 409;
+exports.serverErrorCode = 500;
+exports.castErrorMessage = 'Переданы некорректные данные';
+exports.authErrorMessage = 'Ошибка авторизации';
+exports.rulesErrorMessage = 'Недостаточно прав';
+exports.notFoundErrorMessage = 'Данные не найдены';
+exports.mongoErrorMessage = 'Ошибка базы данных';
+exports.loginErrorMessage = 'Неправильные почта или пароль';
+exports.serverErrorMessage = 'На сервере произошла ошибка';
+exports.cadrDeleteMessage = 'карточка удалена';
