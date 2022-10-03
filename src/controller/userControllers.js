@@ -14,7 +14,7 @@ const {
 const { User } = require('../../models/usersModels');
 
 const { JWT_SECRET, NODE_ENV } = process.env;
-const { jwtKey } = require('../../utils/constants');
+// const { jwtKey } = require('../../utils/constants');
 
 exports.getUserInfo = async (req, res, next) => {
   await User.findById(req.user._id)
@@ -102,7 +102,7 @@ exports.login = (req, res, next) => {
         .then((userAuth) => {
           const token = jwt.sign(
             { _id: userAuth._id },
-            NODE_ENV === 'production' ? JWT_SECRET : jwtKey,
+            NODE_ENV === 'production' ? JWT_SECRET : 'super-strong-secret-key',
             { expiresIn: '1d' },
           );
           res
