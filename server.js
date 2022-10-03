@@ -10,6 +10,7 @@ async function main() {
     NODE_ENV === 'production' ? MONGO_PROD : mongoDev,
   );
   await app.listen(PORT);
+  console.log(`app listen PORT ${PORT}`);
 }
 
 main();
