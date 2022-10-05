@@ -28,7 +28,8 @@ exports.deleteMovieById = async (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
-        next(new CastError(castErrorMessage));
+        // next(new CastError(castErrorMessage));
+        next(new CastError(err));
       } else {
         next(err);
       }
@@ -73,3 +74,12 @@ exports.createMovie = (req, res, next) => {
       }
     });
 };
+
+// .then((movie) => {
+//   if (!movie.owner.equals(req.user._id)) {
+//     return next(new RulesError(rulesErrorMessage));
+//   }
+//   return movie
+//     .remove()
+//     .then(() => res.send({ message: cardDeleteMessage }));
+// })

@@ -44,10 +44,10 @@ const movieShema = new mongoose.Schema(
         validator: (link) => validator.isURL(link),
       },
     },
-    owner: {
-      type: mongoose.ObjectId,
-      required: true,
-    },
+    // owner: {
+    //   type: mongoose.ObjectId,
+    //   required: true,
+    // },
     nameRU: {
       type: String,
       required: true,
