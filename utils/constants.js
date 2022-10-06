@@ -15,4 +15,4 @@ exports.notFoundErrorMessage = 'Данные не найдены';
 exports.mongoErrorMessage = 'Ошибка базы данных';
 exports.loginErrorMessage = 'Неправильные почта или пароль';
 exports.serverErrorMessage = 'На сервере произошла ошибка';
-exports.cadrDeleteMessage = 'карточка удалена';
+exports.cadrDeleteMessage = 'фильм удален';

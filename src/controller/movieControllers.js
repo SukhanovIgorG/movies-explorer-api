@@ -1,10 +1,9 @@
 const { Movie } = require('../../models/movieModels');
 const NotFoundError = require('../../errors/not-found-error');
 const CastError = require('../../errors/cast-error');
-const RulesError = require('../../errors/rules-error');
 
 const {
-  castErrorMessage, notFoundErrorMessage, rulesErrorMessage, cardDeleteMessage,
+  castErrorMessage, notFoundErrorMessage, cadrDeleteMessage,
 } = require('../../utils/constants');
 
 exports.getMovies = async (req, res, next) => {
@@ -19,19 +18,16 @@ exports.deleteMovieById = async (req, res, next) => {
       throw new NotFoundError(notFoundErrorMessage);
     })
     .then((movie) => {
-      if (!movie.owner.equals(req.user._id)) {
-        return next(new RulesError(rulesErrorMessage));
-      }
-      return movie
+      movie
         .remove()
-        .then(() => res.send({ message: cardDeleteMessage }));
+        .then(() => res.send({ message: cadrDeleteMessage }));
     })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
         // next(new CastError(castErrorMessage));
         next(new CastError(err));
       } else {
-        next(err);
+        res.send(err.message);
       }
     });
 };
