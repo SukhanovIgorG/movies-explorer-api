@@ -14,7 +14,6 @@ const {
 const { User } = require('../../models/usersModels');
 
 const { JWT_SECRET, NODE_ENV } = process.env;
-// const { jwtKey } = require('../../utils/constants');
 
 exports.getUserInfo = async (req, res, next) => {
   await User.findById(req.user._id)

@@ -7,7 +7,8 @@ const {
 } = require('../../utils/constants');
 
 exports.getMovies = async (req, res, next) => {
-  await Movie.find({})
+  const owner = req.user._id;
+  await Movie.find({ owner })
     .then((movie) => res.send({ movie }))
     .catch(next);
 };
@@ -33,7 +34,7 @@ exports.deleteMovieById = async (req, res, next) => {
 };
 
 exports.createMovie = (req, res, next) => {
-  const owner = req.user._id;
+  const userId = req.user._id;
   const {
     country,
     director,
@@ -58,8 +59,8 @@ exports.createMovie = (req, res, next) => {
     thumbnail,
     nameRU,
     nameEN,
-    owner,
-    movieId, // ??
+    owner: userId,
+    movieId,
   })
     .then((movie) => res.send({ movie }))
     .catch((err) => {
